@@ -246,7 +246,7 @@
     width: 65%;
     font-weight: lighter;
 }
-
+/* Kontejner za galeriju slika */
 .gallery-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
