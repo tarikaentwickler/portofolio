@@ -343,28 +343,21 @@ background: #0056b3;
 /*--------------------------------------------------------------------------------------------------about end */
 
 /*--------------------------------------------------------------------------------------------------KONTAKT start */
+.contact {
+  font-family: Arial, sans-serif;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
 .contact-form {
-  width: 100%;
-  max-width: 400px;
-  margin: 40px auto; /* center horizontally and add vertical spacing */
+  background: #fff;
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* center children horizontally */
-  justify-content: center; /* center children vertically */
-  text-align: center; /* center text inside form */
-}
-
-/* Slightly reduce padding on very small screens */
-@media (max-width: 480px) {
-  .contact-form {
-    padding: 16px;
-  }
+  width: 400px;
 }
 
 h2 {
