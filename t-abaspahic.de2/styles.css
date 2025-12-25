@@ -343,6 +343,12 @@ background: #0056b3;
 /*--------------------------------------------------------------------------------------------------about end */
 
 /*--------------------------------------------------------------------------------------------------KONTAKT start */
+.contact-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 .contact {
   font-family: Arial, sans-serif;
   display: flex;
