@@ -346,8 +346,9 @@ background: #0056b3;
 
 .contact {
   font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: row;
+  display:grid;
+  place-items: center;
+  
   align-items: center;
   min-height: calc(100vh - 60px); /* account for fixed navbar */
   padding: 60px 20px;
