@@ -275,7 +275,7 @@
 
 /* Slike – fleksibilne i responzivne */
 .image-box img {
-  width: 100%;
+  width: 65%;
   max-width: 350px; /* da ne budu prevelike na desktopu */
   height: auto;
   border-radius: 10px;
