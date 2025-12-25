@@ -256,32 +256,48 @@
   padding: 20px;
 }
 
+/* 📱 Mobilni ekrani – jedna kolona */
+@media (max-width: 600px) {
+  .gallery-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stilizacija svakog boxa */
 .image-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
   text-align: center;
+  gap: 10px;
+  padding: 10px;
 }
+
+/* Slike – fleksibilne i responzivne */
+.image-box img {
+  width: 100%;
+  max-width: 350px; /* da ne budu prevelike na desktopu */
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Naslov ispod slike */
 .image-box h4 {
   font-size: 1rem;
-  letter-spacing: 2px;
-  margin-top: 10px;
+  letter-spacing: 1px;
   color: white;
-  text-align: center;
-}
-.image-box img {
-  width: 45%;
-  height: auto;
-  border-radius: 8px;
+  margin-top: 5px;
 }
 
+/* Tekst ispod slike */
 .image-box p {
-  margin-top: 10px;
-  font-size: 1rem;
-  color: #333;
+  font-size: 0.9rem;
+  color: #ddd;
+  max-width: 90%;
 }
 
-/
+
+
 /*--------------------------------------------------------------------------------------------------about end */
 /*--------------------------------------------------------------------------------------------------projects start */
