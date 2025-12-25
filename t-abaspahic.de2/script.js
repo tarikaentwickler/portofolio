@@ -87,271 +87,48 @@ setInterval(changeQuote, 10000);
 
 
 // Kontakt
- // ============================================
-// EMAILJS KONFIGURACIJA
-// ============================================
-// Ovde unesi svoje podatke iz EmailJS naloga
-const EMAILJS_CONFIG = {
-    publicKey: 'uyeeLyJ-kKvU98qz9',      // Iz: Account → API Keys
-    serviceID: 'SMTP wbeserver',      // Iz: Email Services → Tvoj servis
-    templateID: 'template_bkeb5br'     // Iz: Email Templates → Tvoj template
-};
-
-// ============================================
-// INICIJALIZACIJA EMAILJS
-// ============================================
+ // Init EmailJS sa tvojim public key
 (function() {
-    // Inicijalizuj EmailJS sa tvojim Public Key-em
-    emailjs.init(EMAILJS_CONFIG.publicKey);
-    console.log('✓ EmailJS inicijalizovan');
+  emailjs.init("uyeeLyJ-kKvU98qz9");
 })();
 
-// ============================================
-// DOM ELEMENTI
-// ============================================
-const form = document.getElementById('contactForm');
-const messageDiv = document.getElementById('message');
-const submitBtn = document.getElementById('submitBtn');
+document.getElementById("contact-form").addEventListener("submit", function(event) {
+  event.preventDefault();
 
-// Elementi forme
-const nameInput = document.getElementById('name');
-const companyInput = document.getElementById('company');
-const emailInput = document.getElementById('email');
-const messageInput = document.getElementById('message');
+  // Uzmi vrijednosti iz forme
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
+  const status = document.getElementById("status");
 
-// ============================================
-// GLAVNA FUNKCIJA ZA SLANJE FORME
-// ============================================
-form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // Validacija forme
-    if (!validateForm()) {
-        return;
-    }
-    
-    // Pripremi UI za slanje
-    setLoadingState(true);
-    
-    // Prikupi podatke iz forme
-    const templateParams = {
-        name: nameInput.value.trim(),
-        company: companyInput.value.trim() || 'Nije navedeno',
-        email: emailInput.value.trim(),
-        message: messageInput.value.trim(),
-        // Dodatne informacije
-        sent_date: new Date().toLocaleString('sr-RS'),
-        reply_to: emailInput.value.trim()
-    };
-    
-    try {
-        // Pošalji email kroz EmailJS
-        const response = await emailjs.send(
-            EMAILJS_CONFIG.serviceID,
-            EMAILJS_CONFIG.templateID,
-            templateParams
-        );
-        
-        console.log('✓ Email uspešno poslat:', response);
-        handleSuccess();
-        
-    } catch (error) {
-        console.error('✗ Greška pri slanju:', error);
-        handleError(error);
-    } finally {
-        setLoadingState(false);
-    }
-});
+  // Regex za email validaciju
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// ============================================
-// VALIDACIJA FORME
-// ============================================
-function validateForm() {
-    // Ime i prezime
-    if (nameInput.value.trim().length < 2) {
-        showMessage('Molimo unesite ime i prezime (minimum 2 karaktera)', 'error');
-        nameInput.focus();
-        return false;
-    }
-    
-    // Email validacija
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailInput.value.trim())) {
-        showMessage('Molimo unesite validan email', 'error');
-        emailInput.focus();
-        return false;
-    }
-    
-    // Poruka
-    if (messageInput.value.trim().length < 10) {
-        showMessage('Poruka mora imati minimum 10 karaktera', 'error');
-        messageInput.focus();
-        return false;
-    }
-    
-    return true;
-}
+  // Validacija emaila
+  if (!emailRegex.test(email)) {
+    status.innerText = "Bitte gültige E-Mail eingeben / Please enter a valid email";
+    status.style.color = "red";
+    return;
+  }
 
-// ============================================
-// UI FUNKCIJE
-// ============================================
+  // Validacija poruke (min 10 znakova)
+  if (message.length < 10) {
+    status.innerText = "Nachricht zu kurz (min. 10 Zeichen) / Message too short (min. 10 characters)";
+    status.style.color = "red";
+    return;
+  }
 
-// Postavi loading stanje
-function setLoadingState(isLoading) {
-    submitBtn.disabled = isLoading;
-    
-    if (isLoading) {
-        submitBtn.textContent = 'Šaljem...';
-        submitBtn.style.opacity = '0.7';
-        // Onemogući sva polja
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => input.disabled = true);
-    } else {
-        submitBtn.textContent = 'Pošalji Poruku';
-        submitBtn.style.opacity = '1';
-        // Omogući sva polja
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => input.disabled = false);
-    }
-}
+  // Ako validacija prođe, šaljemo EmailJS
+  status.innerText = "Sende... / Sending...";
+  status.style.color = "blue";
 
-// Prikaži poruku
-function showMessage(text, type) {
-    messageDiv.textContent = text;
-    messageDiv.className = `message ${type} show`;
-    
-    // Automatski sakrij poruku nakon 5 sekundi
-    setTimeout(() => {
-        messageDiv.classList.remove('show');
-    }, 5000);
-    
-    // Skroluj do poruke
-    messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// Uspešno slanje
-function handleSuccess() {
-    showMessage('✓ Hvala! Vaša poruka je uspešno poslata. Javićemo vam se uskoro.', 'success');
-    
-    // Resetuj formu
-    form.reset();
-    
-    // Fokusiraj prvo polje
-    setTimeout(() => {
-        nameInput.focus();
-    }, 100);
-}
-
-// Greška pri slanju
-function handleError(error) {
-    let errorMessage = '✗ Došlo je do greške pri slanju poruke. ';
-    
-    // Specifične greške
-    if (error.text === 'Invalid publicKey') {
-        errorMessage += 'Neispravan Public Key. Proverite konfiguraciju.';
-    } else if (error.text === 'Service not found') {
-        errorMessage += 'Servis nije pronađen. Proverite Service ID.';
-    } else if (error.text === 'Template not found') {
-        errorMessage += 'Template nije pronađen. Proverite Template ID.';
-    } else {
-        errorMessage += 'Molimo pokušajte ponovo.';
-    }
-    
-    showMessage(errorMessage, 'error');
-}
-
-// ============================================
-// POBOLJŠANJA KORISNIČKOG ISKUSTVA
-// ============================================
-
-// Automatsko uklanjanje grešaka pri unosu
-const inputs = form.querySelectorAll('input, textarea');
-inputs.forEach(input => {
-    input.addEventListener('input', () => {
-        if (messageDiv.classList.contains('show') && messageDiv.classList.contains('error')) {
-            messageDiv.classList.remove('show');
-        }
+  emailjs.sendForm("ionos_554", "template_bkeb5br", this)
+    .then(function() {
+      status.innerText = "Nachricht gesendet! / Message sent!";
+      status.style.color = "green";
+      document.getElementById("contact-form").reset(); // očisti formu
+    }, function(error) {
+      status.innerText = "Fehler beim Senden / Error sending message";
+      status.style.color = "red";
+      console.error("Error:", error);
     });
 });
-
-// Spreči slanje forme na Enter u textarea
-messageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        // Shift+Enter za novi red je OK
-    }
-});
-
-// ============================================
-// PROVERA KONFIGURACIJE
-// ============================================
-window.addEventListener('load', () => {
-    const isConfigured = 
-        !EMAILJS_CONFIG.publicKey.includes('TVOJ_') &&
-        !EMAILJS_CONFIG.serviceID.includes('TVOJ_') &&
-        !EMAILJS_CONFIG.templateID.includes('TVOJ_');
-    
-    if (!isConfigured) {
-        console.warn('⚠️ UPOZORENJE: EmailJS kredencijali nisu podešeni!');
-        console.warn('📝 Unesi svoje podatke u EMAILJS_CONFIG objekat na vrhu fajla');
-        
-        showMessage('⚠️ Forma još nije konfigurisana. Kontaktirajte administratora.', 'error');
-        submitBtn.disabled = true;
-    } else {
-        console.log('✓ EmailJS konfiguracija je kompletna');
-    }
-});
-
-// ============================================
-// OPCIONO: RATE LIMITING (Zaštita od spam-a)
-// ============================================
-let lastSubmitTime = 0;
-const SUBMIT_COOLDOWN = 3000; // 3 sekunde između slanja
-
-form.addEventListener('submit', function(e) {
-    const now = Date.now();
-    const timeSinceLastSubmit = now - lastSubmitTime;
-    
-    if (timeSinceLastSubmit < SUBMIT_COOLDOWN) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        const remainingTime = Math.ceil((SUBMIT_COOLDOWN - timeSinceLastSubmit) / 1000);
-        showMessage(`Molimo sačekajte ${remainingTime} sekundi pre ponovnog slanja`, 'error');
-        return false;
-    }
-    
-    lastSubmitTime = now;
-}, true);
-
-// ============================================
-// DEBUG MOD (ukloni za produkciju)
-// ============================================
-const DEBUG_MODE = false;
-
-if (DEBUG_MODE) {
-    console.log('🔧 Debug mod je uključen');
-    console.log('📋 Konfiguracija:', EMAILJS_CONFIG);
-    
-    // Test funkcija (pozovi iz konzole: testEmailJS())
-    window.testEmailJS = function() {
-        console.log('🧪 Test EmailJS konfiguracije...');
-        
-        emailjs.send(
-            EMAILJS_CONFIG.serviceID,
-            EMAILJS_CONFIG.templateID,
-            {
-                name: 'Test Korisnik',
-                company: 'Test Firma',
-                email: 'test@example.com',
-                message: 'Ovo je test poruka',
-                sent_date: new Date().toLocaleString('sr-RS')
-            }
-        ).then(
-            (response) => {
-                console.log('✓ Test uspešan!', response);
-            },
-            (error) => {
-                console.error('✗ Test neuspešan:', error);
-            }
-        );
-    };
-}
