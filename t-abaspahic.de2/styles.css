@@ -349,3 +349,8 @@
   object-fit: cover;
   margin-bottom: 15px;
 }
+.project-card h3 {
+  font-size: 1.2rem;
+  color: white;
+  margin-bottom: 5px;
+}
