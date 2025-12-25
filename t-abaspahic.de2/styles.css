@@ -391,13 +391,13 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
-.contact h2 {
+.contact h1 {
   text-align: center;
-  color: #ffffff;
-  font-size: 2.5rem;
+  color: #3177f8;
+  font-size: 2rem;
   margin-bottom: 40px;
   font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+ 
 }
 
 #contact-form {
@@ -513,13 +513,7 @@
     padding: 30px 15px;
   }
 
-  .contact h1 {
-    margin-bottom: 30px;
-    font-size: 3rem;
-    margin-bottom: 20px;
-    color: #3177f8;
-    width: 60%;
-  }
+ 
 
   #contact-form {
     padding: 25px 20px;
