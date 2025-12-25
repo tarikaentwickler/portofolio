@@ -190,7 +190,7 @@
 .quote-display {
     max-width:  100%;
     overflow: visible;
-    font-size: 1rem;
+    
     font-style: italic;
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
