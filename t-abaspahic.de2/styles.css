@@ -343,14 +343,7 @@ background: #0056b3;
 /*--------------------------------------------------------------------------------------------------about end */
 
 /*--------------------------------------------------------------------------------------------------KONTAKT start */
-.contact {
-  font-family: Arial, sans-serif;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+
 
 .contact-form {
  
