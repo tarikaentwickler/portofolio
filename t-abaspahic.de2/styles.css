@@ -111,6 +111,7 @@
   .home {
     padding-top: 60px; /* Adjust for fixed navbar */
     height: 100px;
+    width: 100%;
   }
 
 
