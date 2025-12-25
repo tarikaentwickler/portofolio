@@ -93,7 +93,10 @@ setInterval(changeQuote, 10000);
 
 const EMAILJS_PUBLIC_KEY = 'uyeeLyJ-kKvU98qz9'; // Tvoj Public Key
 const EMAILJS_SERVICE_ID = 'ionos_554'; // Tvoj Service ID
-const EMAILJS_TEMPLATE_ID = 'template_xsm7dnp'; // Tvoj Template ID
+const EMAILJS_TEMPLATE_ID = ['template_xsm7dnp', 'template_uam47y4']; // Tvoj Template ID
+
++
+
 
 // Inicijalizacija EmailJS
 (function() {
