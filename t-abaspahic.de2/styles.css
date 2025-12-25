@@ -56,8 +56,8 @@
 
     /* Responsive styling --------------------------------------------------------------------------00000000000000*/
    @media (max-width: 480px) {
-       .gallery-container {
-  display: grid;
+  .gallery-container {
+  
   grid-template-columns: repeat(1, 1fr);
   }
     }
@@ -255,7 +255,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  max-width: 800px;
+  max-width: 480px;
   margin: 0 auto;
   padding: 20px;
 }
