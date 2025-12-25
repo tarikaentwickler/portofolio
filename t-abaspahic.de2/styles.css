@@ -296,6 +296,8 @@
   font-size: 0.9rem;
   color: #ddd;
   max-width: 90%;
+  text-justify: inter-word;
+
 }
 
 
@@ -314,7 +316,7 @@
 }
 
 .projects h2 {
-    font-size: 2rem;
+    font-size: 3rem;
     margin: 20px 0;
 }
 
@@ -349,11 +351,6 @@
   object-fit: cover;
   margin-bottom: 15px;
 }
-.project-card h3 {
-  font-size: 1.2rem;
-  color: white;
-  margin-bottom: 5px;
-}
 
 /* Naslov ispod slike */
 .project-card h4 {
@@ -361,7 +358,6 @@
   letter-spacing: 1px;
   color: white;
   margin-top: 5px;
-
 }
 
 /* Tekst ispod slike */
@@ -369,4 +365,6 @@
   font-size: 0.9rem;
   color: #ddd;
   max-width: 90%;
+  text-justify: inter-word;
+
 }
