@@ -288,6 +288,7 @@
   letter-spacing: 1px;
   color: white;
   margin-top: 5px;
+
 }
 
 /* Tekst ispod slike */
@@ -301,3 +302,27 @@
 
 /*--------------------------------------------------------------------------------------------------about end */
 /*--------------------------------------------------------------------------------------------------projects start */
+.projects {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    background-image: linear-gradient(to bottom, #7508a0, #202766);
+    color: white;
+    text-align: center;
+}
+
+.projects h2 {
+    font-size: 2rem;
+    margin: 20px 0;
+}
+
+.projects-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
