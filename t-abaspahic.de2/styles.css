@@ -317,9 +317,12 @@
     text-align: center;
 }
 
-.projects h2 {
-    font-size: 3rem;
+.projects h1 {
     margin: 60px 0;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #3177f8;
+    width: 60%;
 
 }
 
@@ -510,9 +513,12 @@
     padding: 30px 15px;
   }
 
-  .contact h2 {
-    font-size: 2rem;
+  .contact h1 {
     margin-bottom: 30px;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #3177f8;
+    width: 60%;
   }
 
   #contact-form {
