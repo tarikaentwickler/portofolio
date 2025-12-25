@@ -354,3 +354,19 @@
   color: white;
   margin-bottom: 5px;
 }
+
+/* Naslov ispod slike */
+.project-card h4 {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: white;
+  margin-top: 5px;
+
+}
+
+/* Tekst ispod slike */
+.project-card p {
+  font-size: 0.9rem;
+  color: #ddd;
+  max-width: 90%;
+}
