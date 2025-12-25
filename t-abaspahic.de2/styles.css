@@ -93,7 +93,7 @@
         width: 100%;
       }
     }
-
+.gallery-container { grid-template-columns: 1fr; } 
     .logo {
       font-size: 12px;
       color: white;
