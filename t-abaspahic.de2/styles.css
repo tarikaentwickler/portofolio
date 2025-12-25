@@ -375,7 +375,8 @@
   font-size: 0.9rem;
   color: #ddd;
   max-width: 90%;
-  text-justify: inter-word;
+  text-align: center;
+  align-items: center;
 
 }
 
