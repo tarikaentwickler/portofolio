@@ -55,6 +55,13 @@
 }
 
     /* Responsive styling --------------------------------------------------------------------------00000000000000*/
+   @media (max-width: 480px) {
+       .gallery-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  }
+    }
+   
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -119,10 +126,7 @@
     height: 100px;
     width: 100%;
   }
-  .gallery-container {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  }
+ 
 
 
 /*------------------------------------------------------------------------------------------------Lang Button start*/
