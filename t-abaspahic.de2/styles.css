@@ -378,30 +378,6 @@ background: #0056b3;
   font-family: inherit;
 }
 
-/* support a two-column layout if markup uses a grid inside the form */
-@media (min-width: 900px) {
-  .contact .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-items: start;
-  }
-  .contact .contact-grid .full {
-    grid-column: 1 / -1;
-  }
-}
-
-/* mobile adjustments */
-@media (max-width: 480px) {
-  .contact {
-    padding: 30px 12px;
-  }
-  .contact .contact-form {
-    padding: 18px;
-    border-radius: 10px;
-  }
-}
-
 .contact-form {
   background: #fff;
   padding: 25px;
