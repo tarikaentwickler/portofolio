@@ -119,6 +119,10 @@
     height: 100px;
     width: 100%;
   }
+  .gallery-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  }
 
 
 /*------------------------------------------------------------------------------------------------Lang Button start*/
