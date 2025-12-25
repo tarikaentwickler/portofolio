@@ -345,7 +345,7 @@ background: #0056b3;
 /*--------------------------------------------------------------------------------------------------KONTAKT start */
 .contact {
   font-family: Arial, sans-serif;
-  background: #f4f6f8;
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -353,7 +353,7 @@ background: #0056b3;
 }
 
 .contact-form {
-  background: #fff;
+ 
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
