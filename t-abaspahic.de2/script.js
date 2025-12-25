@@ -87,3 +87,94 @@ setInterval(changeQuote, 10000);
 
 
 // Kontakt
+// EmailJS Configuration
+// Prvo se registruj na https://www.emailjs.com/
+// Zameni ove vrednosti sa tvojim EmailJS podacima
+
+const EMAILJS_PUBLIC_KEY = 'uyeeLyJ-kKvU98qz9'; // Tvoj Public Key
+const EMAILJS_SERVICE_ID = 'ionos_554'; // Tvoj Service ID
+const EMAILJS_TEMPLATE_ID = 'template_xsm7dnp'; // Tvoj Template ID
+
+// Inicijalizacija EmailJS
+(function() {
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+})();
+
+// Form Submit Handler
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const submitButton = this.querySelector('button[type="submit"]');
+  const originalButtonText = submitButton.textContent;
+  
+  // Disable button i promeni tekst
+  submitButton.disabled = true;
+  submitButton.textContent = 'Šaljem...';
+  
+  // Ukloni prethodne poruke ako postoje
+  const existingMessage = document.querySelector('.form-message');
+  if (existingMessage) {
+    existingMessage.remove();
+  }
+  
+  // Prikupi podatke iz forme
+  const templateParams = {
+    from_name: document.getElementById('name').value,
+    from_company: document.getElementById('company').value,
+    from_email: document.getElementById('email').value,
+    message: document.getElementById('message').value,
+    to_name: 'Your Name' // Tvoje ime
+  };
+  
+  // Pošalji email preko EmailJS
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+    .then(function(response) {
+      console.log('SUCCESS!', response.status, response.text);
+      
+      // Prikaži success poruku
+      showMessage('Poruka je uspešno poslata! Javićemo se uskoro.', 'success');
+      
+      // Resetuj formu
+      document.getElementById('contact-form').reset();
+      
+      // Vrati button u normalno stanje
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
+      
+    }, function(error) {
+      console.log('FAILED...', error);
+      
+      // Prikaži error poruku
+      showMessage('Došlo je do greške. Molimo pokušajte ponovo.', 'error');
+      
+      // Vrati button u normalno stanje
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
+    });
+});
+
+// Funkcija za prikaz poruka
+function showMessage(text, type) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `form-message ${type}`;
+  messageDiv.textContent = text;
+  
+  const form = document.getElementById('contact-form');
+  form.insertBefore(messageDiv, form.firstChild);
+  
+  // Ukloni poruku nakon 5 sekundi
+  setTimeout(() => {
+    messageDiv.remove();
+  }, 5000);
+}
+
+// Validacija email adrese u realnom vremenu
+document.getElementById('email').addEventListener('blur', function() {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(this.value) && this.value !== '') {
+    this.style.borderColor = '#dc3545';
+    showMessage('Molimo unesite validnu email adresu.', 'error');
+  } else {
+    this.style.borderColor = '#e0e0e0';
+  }
+});
