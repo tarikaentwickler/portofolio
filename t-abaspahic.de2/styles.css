@@ -359,10 +359,7 @@ background: #0056b3;
   max-width: 540px;
   box-sizing: border-box;
   padding: 28px;
-  background: rgba(255,255,255,0.98);
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(2,6,23,0.28);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+
 }
 
 /* subtle hover/active effect */
