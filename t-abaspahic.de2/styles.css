@@ -409,8 +409,25 @@ background: #0056b3;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   width: 400px;
 }
-
 h1 {
+/* Center H1 and keep its text on one line */
+display: block;
+width: 100%;
+text-align: center;
+white-space: nowrap; /* don't wrap the text */
+overflow: hidden; /* hide overflow if too long */
+margin: 0 auto 20px;
+
+/* If you want the H1 vertically centered in the viewport instead,
+  replace the above with the following (uncommented):
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+*/ 
+  font-size: 2rem;
+  font-weight: bold;
+
   text-align: center;
   margin-bottom: 20px;
   color: #333;
