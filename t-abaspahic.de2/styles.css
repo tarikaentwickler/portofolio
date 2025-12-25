@@ -83,6 +83,12 @@
        margin-right: 10px;
        display: none;
       }
+      .home {
+        width: 100%;
+      }
+      .about {
+        width: 100%;
+      }
     }
 
     .logo {
