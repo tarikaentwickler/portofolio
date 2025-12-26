@@ -42,8 +42,7 @@ deButton.addEventListener("click", () => switchLanguage("de"));
 // Set default language to German
 switchLanguage("de");
 
-// Set default language to German
-switchLanguage("de");
+
 
 // Citat funkcionalnost
 const quotes = [
