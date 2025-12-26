@@ -399,6 +399,7 @@
   font-size: 2rem;
   margin-bottom: 40px;
   font-weight: 700;
+  margin-top: 40px;
  
 }
 
@@ -609,7 +610,7 @@
   color: #666;
   font-style: italic;
   margin-top: 5px;
-  
+
 }
 
 @media (max-width: 768px) {
