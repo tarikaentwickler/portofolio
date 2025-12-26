@@ -226,7 +226,6 @@
 /*--------------------------------------------------------------------------------------------------about start */
 .about {
     display: flex;
-    margin-top: 60px;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
@@ -239,7 +238,7 @@
 .about h1 {
     font-size: 2rem;
     margin-bottom: 20px;
-    margin-top: 60px;
+    margin-top: 80px;
 }
 
 .about h4 {
