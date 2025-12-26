@@ -59,6 +59,9 @@
    @media (max-width: 600px) { 
     .gallery-container { grid-template-columns: 1fr; } 
   }
+  .logo {
+        display: none;     
+      }
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -82,8 +85,7 @@
       }
 
       .logo {
-        display: none;
-       
+        display: none;     
       }
       .logo-text {
        font-weight: 100%;
