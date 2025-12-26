@@ -394,11 +394,11 @@
 }
 
 .contact h1 {
-  text-align: start
+  text-align: start;
   color: #3177f8;
   font-size: 2rem;
   font-weight: 700;
-  margin-top: 40;
+  margin-top: 50px;
  
 }
 
