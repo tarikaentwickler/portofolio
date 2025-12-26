@@ -96,8 +96,7 @@ setInterval(changeQuote, 10000);
 
 // Kontakt
 // EmailJS Configuration
-// Prvo se registruj na https://www.emailjs.com/
-// Zameni ove vrednosti sa tvojim EmailJS podacima
+
 
 const EMAILJS_PUBLIC_KEY = 'uyeeLyJ-kKvU98qz9'; // Tvoj Public Key
 const EMAILJS_SERVICE_ID = 'ionos_554'; // Tvoj Service ID
@@ -119,7 +118,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   
   // Disable button i promeni tekst
   submitButton.disabled = true;
-  submitButton.textContent = 'Šaljem...';
+  submitButton.textContent = 'Sending…';
   
   // Ukloni prethodne poruke ako postoje
   const existingMessage = document.querySelector('.form-message');
@@ -133,7 +132,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     from_company: document.getElementById('company').value,
     from_email: document.getElementById('email').value,
     message: document.getElementById('message').value,
-    to_name: 'Your Name' // Tvoje ime
+    to_name: 'Tarik Abaspahic' // Tvoje ime
   };
   
   // Pošalji email preko EmailJS
@@ -142,7 +141,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
       console.log('SUCCESS!', response.status, response.text);
       
       // Prikaži success poruku
-      showMessage('Poruka je uspešno poslata! Javićemo se uskoro.', 'success');
+      showMessage('Message sent successfully!', 'success');
       
       // Resetuj formu
       document.getElementById('contact-form').reset();
@@ -155,7 +154,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
       console.log('FAILED...', error);
       
       // Prikaži error poruku
-      showMessage('Došlo je do greške. Molimo pokušajte ponovo.', 'error');
+      showMessage('An error occurred. Please try again.', 'error');
       
       // Vrati button u normalno stanje
       submitButton.disabled = false;
@@ -183,7 +182,7 @@ document.getElementById('email').addEventListener('blur', function() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(this.value) && this.value !== '') {
     this.style.borderColor = '#dc3545';
-    showMessage('Molimo unesite validnu email adresu.', 'error');
+    showMessage('“Please enter a valid email address.', 'error');
   } else {
     this.style.borderColor = '#e0e0e0';
   }
