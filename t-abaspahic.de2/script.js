@@ -1,27 +1,27 @@
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('nav-links');
+const hamburger = document.querySelector('.hamburger'); // promenjeno
+const navLinks = document.querySelector('.nav-links'); // promenjeno
 
-  // Otvori/zatvori meni kada se klikne hamburger dugme
-  hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // spreči zatvaranje odmah nakon otvaranja
-    navLinks.classList.toggle('active');
-  });
+// Otvori/zatvori meni kada se klikne hamburger dugme
+hamburger.addEventListener('click', (e) => {
+  e.stopPropagation(); // spreči zatvaranje odmah nakon otvaranja
+  navLinks.classList.toggle('active');
+});
 
-  // Zatvori meni ako klikneš bilo gdje izvan menija
-  document.addEventListener('click', (e) => {
-    const isClickInsideMenu = navLinks.contains(e.target) || hamburger.contains(e.target);
-    if (!isClickInsideMenu) {
-      navLinks.classList.remove('active');
-    }
-  });
+// Zatvori meni ako klikneš bilo gdje izvan menija
+document.addEventListener('click', (e) => {
+  const isClickInsideMenu = navLinks.contains(e.target) || hamburger.contains(e.target);
+  if (!isClickInsideMenu) {
+    navLinks.classList.remove('active');
+  }
+});
 
-  // ZATVARANJE MENIJA KADA SE KLIKNE NA LINK 
-  const menuLinks = navLinks.querySelectorAll('a'); 
-  menuLinks.forEach(link => { 
-    link.addEventListener('click', () => { 
-        navLinks.classList.remove('active');
-     }); 
-    });
+// ZATVARANJE MENIJA KADA SE KLIKNE NA LINK 
+const menuLinks = navLinks.querySelectorAll('a'); 
+menuLinks.forEach(link => { 
+  link.addEventListener('click', () => { 
+    navLinks.classList.remove('active');
+  }); 
+});
 
 // Select language switcher buttons
 const enButton = document.getElementById("en-btn");
