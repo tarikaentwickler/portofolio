@@ -267,6 +267,9 @@
   .gallery-container {
     grid-template-columns: 1fr;
   }
+  .logo {
+        display: none;     
+      }
 }
 
 /* Stilizacija svakog boxa */
