@@ -70,6 +70,10 @@
         width: 100%;
         padding: 10px 20px;
       }
+
+      .logo {
+       display: none;
+      }
       
       .nav-links.active {
         display: flex;
@@ -96,10 +100,10 @@
     }
 .gallery-container { grid-template-columns: 1fr; } 
     .logo {
-      display: none;
       font-size: 12px;
       color: white;
       text-decoration: none;
+      display: flex;
       justify-content: space-between;
       align-items: center;
     }
