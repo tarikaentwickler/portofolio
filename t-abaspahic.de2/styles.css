@@ -226,6 +226,7 @@
 /*--------------------------------------------------------------------------------------------------about start */
 .about {
     display: flex;
+    margin-top: 60px;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
