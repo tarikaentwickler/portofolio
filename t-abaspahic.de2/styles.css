@@ -364,10 +364,10 @@
 
 /* Naslov ispod slike */
 .project-card h4 {
-  font-size: 1rem;
+  font-size: 1.2rem;
   letter-spacing: 1px;
   color: white;
-  width: 75%;
+ 
   margin-top: 5px;
 }
 
@@ -375,9 +375,9 @@
 .project-card p {
   font-size: 0.9rem;
   color: #ddd;
-  max-width: 90%;
+  max-width: 70%;
   text-align: center;
-  align-items: center;
+  
 
 }
 
