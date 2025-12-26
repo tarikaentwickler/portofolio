@@ -15,6 +15,14 @@
     }
   });
 
+  // ZATVARANJE MENIJA KADA SE KLIKNE NA LINK 
+  const menuLinks = navLinks.querySelectorAll('a'); 
+  menuLinks.forEach(link => { 
+    link.addEventListener('click', () => { 
+        navLinks.classList.remove('active');
+     }); 
+    });
+
 // Select language switcher buttons
 const enButton = document.getElementById("en-btn");
 const deButton = document.getElementById("de-btn");
