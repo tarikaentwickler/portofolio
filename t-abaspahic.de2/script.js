@@ -27,7 +27,7 @@ menuLinks.forEach(link => {
 const enButton = document.getElementById("en-btn");
 const deButton = document.getElementById("de-btn");
 
-// Function to switch language
+// Function to switch language (updates all elements with data-en and data-de)
 function switchLanguage(language) {
   const translatableElements = document.querySelectorAll("[data-en][data-de]");
   translatableElements.forEach((element) => {
@@ -35,12 +35,129 @@ function switchLanguage(language) {
   });
 }
 
-// Add event listeners to language buttons
-enButton.addEventListener("click", () => switchLanguage("en"));
-deButton.addEventListener("click", () => switchLanguage("de"));
+// When user clicks language buttons in the page, switch and persist choice
+if (enButton) enButton.addEventListener("click", () => {
+  switchLanguage("en");
+  localStorage.setItem('preferredLanguage', 'en');
+});
+if (deButton) deButton.addEventListener("click", () => {
+  switchLanguage("de");
+  localStorage.setItem('preferredLanguage', 'de');
+});
 
-// Set default language to German
-switchLanguage("de");
+// Show a language selection modal on first visit (or if no preference saved).
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('preferredLanguage');
+  if (saved) {
+    // Apply saved language
+    switchLanguage(saved);
+  } else {
+    showLanguageModal();
+  }
+});
+
+// Create and show a modal that lets the user pick a language and confirms with a greeting
+function showLanguageModal() {
+  // Create overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'lang-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.background = 'rgba(0,0,0,0.5)';
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.zIndex = '9999';
+
+  // Create modal box
+  const modal = document.createElement('div');
+  modal.id = 'lang-modal';
+  modal.style.background = '#fff';
+  modal.style.padding = '20px';
+  modal.style.borderRadius = '8px';
+  modal.style.maxWidth = '90%';
+  modal.style.width = '420px';
+  modal.style.boxShadow = '0 6px 24px rgba(0,0,0,0.2)';
+  modal.style.textAlign = 'center';
+
+  const title = document.createElement('h2');
+  title.textContent = 'Choose your language / Wähle deine Sprache';
+  title.style.marginTop = '0';
+
+  const buttonsWrap = document.createElement('div');
+  buttonsWrap.style.display = 'flex';
+  buttonsWrap.style.justifyContent = 'center';
+  buttonsWrap.style.gap = '12px';
+  buttonsWrap.style.marginTop = '16px';
+
+  const btnDe = document.createElement('button');
+  btnDe.type = 'button';
+  btnDe.textContent = 'Deutsch';
+  btnDe.dataset.lang = 'de';
+  btnDe.style.padding = '10px 16px';
+
+  const btnEn = document.createElement('button');
+  btnEn.type = 'button';
+  btnEn.textContent = 'English';
+  btnEn.dataset.lang = 'en';
+  btnEn.style.padding = '10px 16px';
+
+  buttonsWrap.appendChild(btnDe);
+  buttonsWrap.appendChild(btnEn);
+
+  modal.appendChild(title);
+  modal.appendChild(buttonsWrap);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  // Prevent background scroll while modal is open
+  const prevOverflow = document.documentElement.style.overflow;
+  document.documentElement.style.overflow = 'hidden';
+
+  function closeModal() {
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    document.documentElement.style.overflow = prevOverflow;
+  }
+
+  function showGreetingAndPersist(lang) {
+    // Apply immediately so content in page changes while modal is visible
+    switchLanguage(lang);
+
+    // Replace modal content with greeting and OK button
+    modal.innerHTML = '';
+    const greeting = document.createElement('p');
+    greeting.style.fontSize = '18px';
+    greeting.style.margin = '18px 0';
+    greeting.textContent = lang === 'de' ? 'Willkommen auf der Seite!' : 'Welcome to the site!';
+
+    const okBtn = document.createElement('button');
+    okBtn.type = 'button';
+    okBtn.textContent = lang === 'de' ? 'OK' : 'OK';
+    okBtn.style.padding = '10px 18px';
+
+    modal.appendChild(greeting);
+    modal.appendChild(okBtn);
+
+    okBtn.addEventListener('click', () => {
+      localStorage.setItem('preferredLanguage', lang);
+      closeModal();
+    });
+  }
+
+  // Attach handlers
+  btnDe.addEventListener('click', () => showGreetingAndPersist('de'));
+  btnEn.addEventListener('click', () => showGreetingAndPersist('en'));
+
+  // If user clicks outside modal, don't close automatically to force a choice; optional: could close
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      // keep modal open — encourage language choice
+    }
+  });
+}
 
 
 
@@ -100,7 +217,7 @@ setInterval(changeQuote, 10000);
 const EMAILJS_PUBLIC_KEY = 'uyeeLyJ-kKvU98qz9'; // Tvoj Public Key
 const EMAILJS_SERVICE_ID = 'ionos_554'; // Tvoj Service ID
 const EMAILJS_TEMPLATE_ID = 'template_xsm7dnp'; // Tvoj Template ID
-+
+
 
 
 // Inicijalizacija EmailJS
