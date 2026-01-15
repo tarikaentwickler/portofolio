@@ -75,7 +75,8 @@ function showLanguageModal() {
   // Create modal box
   const modal = document.createElement('div');
   modal.id = 'lang-modal';
-  modal.style.background = '#fff';
+    modal.style.background = '#202766';
+    modal.style.color = '#ffffff';
   modal.style.padding = '20px';
   modal.style.borderRadius = '8px';
   modal.style.maxWidth = '90%';
@@ -98,12 +99,22 @@ function showLanguageModal() {
   btnDe.textContent = 'Deutsch';
   btnDe.dataset.lang = 'de';
   btnDe.style.padding = '10px 16px';
+    btnDe.style.backgroundColor = '#3177f8';
+    btnDe.style.color = '#000000';
+    btnDe.style.border = 'none';
+    btnDe.style.borderRadius = '6px';
+    btnDe.style.cursor = 'pointer';
 
   const btnEn = document.createElement('button');
   btnEn.type = 'button';
   btnEn.textContent = 'English';
   btnEn.dataset.lang = 'en';
   btnEn.style.padding = '10px 16px';
+    btnEn.style.backgroundColor = '#3177f8';
+    btnEn.style.color = '#000000';
+    btnEn.style.border = 'none';
+    btnEn.style.borderRadius = '6px';
+    btnEn.style.cursor = 'pointer';
 
   buttonsWrap.appendChild(btnDe);
   buttonsWrap.appendChild(btnEn);
@@ -131,12 +142,18 @@ function showLanguageModal() {
     const greeting = document.createElement('p');
     greeting.style.fontSize = '18px';
     greeting.style.margin = '18px 0';
-    greeting.textContent = lang === 'de' ? 'Willkommen auf der Seite!' : 'Welcome to the site!';
+    greeting.style.color = '#ffffff';
+    greeting.textContent = lang === 'de' ? 'Willkommen! 👋😊' : 'Welcome! 👋😊';
 
     const okBtn = document.createElement('button');
     okBtn.type = 'button';
     okBtn.textContent = lang === 'de' ? 'OK' : 'OK';
     okBtn.style.padding = '10px 18px';
+    okBtn.style.backgroundColor = '#3177f8';
+    okBtn.style.color = '#000000';
+    okBtn.style.border = 'none';
+    okBtn.style.borderRadius = '6px';
+    okBtn.style.cursor = 'pointer';
 
     modal.appendChild(greeting);
     modal.appendChild(okBtn);
