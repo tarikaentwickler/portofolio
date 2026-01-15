@@ -112,9 +112,4 @@ This project doesn't include an explicit license file. Suggested: MIT License. A
 
 If you need help customizing the site or want additional features, open an issue or contact Tarik via the email listed on the site.
 
----
 
-Created automatically — if you'd like I can also:
-- Move modal inline styles into `t-abaspahic.de2/styles.css` and add responsive modal styling,
-- Add ARIA attributes and Esc/Outside-click behavior for the modal,
-- Create a short CONTRIBUTING or LICENSE file.
