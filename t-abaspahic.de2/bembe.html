@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEMBE.play</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .lang-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .stats {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .stat {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            perspective: 1000px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            opacity: 1;
+            cursor: default;
+        }
+
+        .card.matched:hover {
+            transform: none;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .card-back {
+            background: white;
+            transform: rotateY(180deg);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-back svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        .win-message.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .win-message h2 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .win-message p {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .info-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .info-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .info-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .info-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .info-popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .info-popup-content h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .info-popup-content p {
+            color: #333;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .close-info {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .close-info:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+            
+            .game-board {
+                gap: 8px;
+                max-width: 95vw;
+                padding: 0 5px;
+            }
+
+            .game-board.size-4x4 {
+                max-width: 95vw;
+            }
+
+            .game-board.size-5x5 {
+                max-width: 95vw;
+            }
+            
+            .card-front {
+                font-size: 1em;
+            }
+
+            .card-back {
+                padding: 12px;
+            }
+
+            .stat {
+                font-size: 0.8em;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .card-front {
+                font-size: 0.8em;
+            }
+
+            .card-back {
+                padding: 10px;
+            }
+
+            .game-board {
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="info-btn" onclick="openInfoPopup()" title="O igri">ℹ️</button>
+        <h1>🏎️ <span id="gameTitle">BEMBE.play</span> 🏎️</h1>
+        <p id="gameSubtitle">Pronađi parove autića!</p>
+        <div class="language-switcher">
+            <button class="lang-btn active" onclick="changeLanguage('bs')">🇧🇦 BS</button>
+            <button class="lang-btn" onclick="changeLanguage('de')">🇩🇪 DE</button>
+            <button class="lang-btn" onclick="changeLanguage('en')">🇬🇧 EN</button>
+        </div>
+    </div>
+
+    <div class="info-popup" id="infoPopup">
+        <div class="info-popup-content">
+            <h2 id="infoTitle">O igri</h2>
+            <p id="infoText">Tekst priče...</p>
+            <button class="close-info" onclick="closeInfoPopup()" id="closeBtn">Zatvori</button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><span id="labelMoves">Poteza</span>: <span id="moves">0</span></div>
+        <div class="stat"><span id="labelPairs">Parova</span>: <span id="pairs">0</span>/<span id="totalPairs">4</span></div>
+        <div class="stat"><span id="labelTime">Vrijeme</span>: <span id="time">0</span>s</div>
+    </div>
+
+    <div class="game-board" id="gameBoard"></div>
+
+    <div class="controls">
+        <button class="btn" onclick="resetGame()">🔄 <span id="labelNewGame">Nova Igra</span></button>
+    </div>
+
+    <div class="win-message" id="winMessage">
+        <h2 id="winTitle">🎉 Bravo! 🎉</h2>
+        <p id="winText">Pronašao si sve parove!</p>
+        <p><span id="labelFinalMoves">Poteza</span>: <span id="finalMoves"></span></p>
+        <p><span id="labelFinalTime">Vrijeme</span>: <span id="finalTime"></span>s</p>
+        <button class="btn" onclick="resetGame()" style="margin-top: 20px;"><span id="labelPlayAgain">Igraj Opet</span></button>
+    </div>
+
+    <script>
+        // SVG ikone autića - poboljšane i jasnije za djecu
+        const carImages = [
+            // Auto 1 - Crveni sedan
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow1" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="12" y="28" width="56" height="18" fill="#e74c3c" rx="6" filter="url(#shadow1)"/><rect x="22" y="18" width="28" height="14" fill="#c0392b" rx="4"/><circle cx="24" cy="46" r="7" fill="#2c3e50"/><circle cx="24" cy="46" r="4" fill="#ecf0f1"/><circle cx="56" cy="46" r="7" fill="#2c3e50"/><circle cx="56" cy="46" r="4" fill="#ecf0f1"/><rect x="24" y="20" width="7" height="10" fill="#5dade2" rx="1"/><rect x="45" y="20" width="7" height="10" fill="#5dade2" rx="1"/><line x1="12" y1="36" x2="68" y2="36" stroke="#fff" stroke-width="1" opacity="0.5"/></svg>`,
+            
+            // Auto 2 - Plavi SUV
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow2" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="10" y="26" width="62" height="20" fill="#3498db" rx="6" filter="url(#shadow2)"/><rect x="18" y="14" width="32" height="16" fill="#2980b9" rx="4"/><circle cx="22" cy="47" r="8" fill="#2c3e50"/><circle cx="22" cy="47" r="4" fill="#ecf0f1"/><circle cx="58" cy="47" r="8" fill="#2c3e50"/><circle cx="58" cy="47" r="4" fill="#ecf0f1"/><rect x="20" y="16" width="8" height="12" fill="#5dade2" rx="1"/><rect x="40" y="16" width="8" height="12" fill="#5dade2" rx="1"/><polygon points="42,26 50,26 48,32 44,32" fill="#f39c12" opacity="0.8"/></svg>`,
+            
+            // Auto 3 - Zeleni kamionet
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow3" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="10" y="28" width="60" height="18" fill="#27ae60" rx="5" filter="url(#shadow3)"/><rect x="56" y="16" width="18" height="18" fill="#229954" rx="3"/><circle cx="22" cy="47" r="7" fill="#2c3e50"/><circle cx="22" cy="47" r="4" fill="#ecf0f1"/><circle cx="58" cy="47" r="7" fill="#2c3e50"/><circle cx="58" cy="47" r="4" fill="#ecf0f1"/><rect x="60" y="19" width="10" height="12" fill="#5dade2" rx="1"/><line x1="56" y1="34" x2="70" y2="34" stroke="#fff" stroke-width="1.5" opacity="0.6"/></svg>`,
+            
+            // Auto 4 - Žuti taksi
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow4" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="12" y="28" width="56" height="18" fill="#f39c12" rx="6" filter="url(#shadow4)"/><rect x="22" y="18" width="28" height="14" fill="#e67e22" rx="4"/><rect x="32" y="12" width="12" height="6" fill="#f1c40f" rx="2"/><circle cx="24" cy="46" r="7" fill="#2c3e50"/><circle cx="24" cy="46" r="4" fill="#ecf0f1"/><circle cx="56" cy="46" r="7" fill="#2c3e50"/><circle cx="56" cy="46" r="4" fill="#ecf0f1"/><rect x="24" y="20" width="7" height="10" fill="#5dade2" rx="1"/><rect x="45" y="20" width="7" height="10" fill="#5dade2" rx="1"/><text x="40" y="35" font-size="8" fill="#fff" font-weight="bold" text-anchor="middle">TAXI</text></svg>`,
+            
+            // Auto 5 - Ljubičasti sportski
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow5" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><path d="M 15 32 L 22 18 L 58 18 L 70 32 L 70 46 L 15 46 Z" fill="#9b59b6" filter="url(#shadow5)"/><rect x="24" y="20" width="10" height="12" fill="#5dade2" rx="1"/><rect x="48" y="20" width="16" height="12" fill="#5dade2" rx="1"/><circle cx="26" cy="47" r="7" fill="#2c3e50"/><circle cx="26" cy="47" r="4" fill="#ecf0f1"/><circle cx="59" cy="47" r="7" fill="#2c3e50"/><circle cx="59" cy="47" r="4" fill="#ecf0f1"/><line x1="15" y1="40" x2="70" y2="40" stroke="#fff" stroke-width="1" opacity="0.4"/></svg>`,
+            
+            // Auto 6 - Policijski auto
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow6" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="12" y="28" width="56" height="18" fill="#2c3e50" rx="6" filter="url(#shadow6)"/><rect x="22" y="18" width="28" height="14" fill="#34495e" rx="4"/><rect x="32" y="12" width="12" height="6" fill="#e74c3c" rx="1"/><circle cx="24" cy="46" r="7" fill="#2c3e50"/><circle cx="24" cy="46" r="4" fill="#ecf0f1"/><circle cx="56" cy="46" r="7" fill="#2c3e50"/><circle cx="56" cy="46" r="4" fill="#ecf0f1"/><rect x="24" y="20" width="7" height="10" fill="#5dade2" rx="1"/><rect x="45" y="20" width="7" height="10" fill="#5dade2" rx="1"/><text x="40" y="35" font-size="7" fill="#e74c3c" font-weight="bold" text-anchor="middle">🚓</text></svg>`,
+            
+            // Auto 7 - Narandžasti auto
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow7" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="12" y="28" width="56" height="18" fill="#e67e22" rx="6" filter="url(#shadow7)"/><rect x="22" y="18" width="28" height="14" fill="#d35400" rx="4"/><circle cx="24" cy="46" r="7" fill="#2c3e50"/><circle cx="24" cy="46" r="4" fill="#ecf0f1"/><circle cx="56" cy="46" r="7" fill="#2c3e50"/><circle cx="56" cy="46" r="4" fill="#ecf0f1"/><rect x="24" y="20" width="7" height="10" fill="#5dade2" rx="1"/><rect x="45" y="20" width="7" height="10" fill="#5dade2" rx="1"/><polygon points="60,30 68,30 66,36 62,36" fill="#f39c12" opacity="0.9"/></svg>`,
+            
+            // Auto 8 - Ružičasti auto
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow8" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="12" y="28" width="56" height="18" fill="#e91e63" rx="6" filter="url(#shadow8)"/><rect x="22" y="18" width="28" height="14" fill="#c2185b" rx="4"/><circle cx="24" cy="46" r="7" fill="#2c3e50"/><circle cx="24" cy="46" r="4" fill="#ecf0f1"/><circle cx="56" cy="46" r="7" fill="#2c3e50"/><circle cx="56" cy="46" r="4" fill="#ecf0f1"/><rect x="24" y="20" width="7" height="10" fill="#5dade2" rx="1"/><rect x="45" y="20" width="7" height="10" fill="#5dade2" rx="1"/><circle cx="40" cy="24" r="1.5" fill="#fff" opacity="0.7"/></svg>`,
+            
+            // Auto 9 - Vatrogasno vozilo
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow9" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="10" y="26" width="62" height="20" fill="#c0392b" rx="5" filter="url(#shadow9)"/><rect x="52" y="14" width="20" height="16" fill="#e74c3c" rx="3"/><circle cx="20" cy="47" r="8" fill="#2c3e50"/><circle cx="20" cy="47" r="4" fill="#ecf0f1"/><circle cx="62" cy="47" r="8" fill="#2c3e50"/><circle cx="62" cy="47" r="4" fill="#ecf0f1"/><rect x="54" y="17" width="8" height="12" fill="#5dade2" rx="1"/><circle cx="18" cy="32" r="3" fill="#f39c12"/><circle cx="28" cy="32" r="3" fill="#f39c12"/><text x="40" y="38" font-size="8" fill="#fff" font-weight="bold" text-anchor="middle">🚒</text></svg>`,
+            
+            // Auto 10 - Tirkizni mini
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow10" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="16" y="28" width="48" height="16" fill="#16a085" rx="6" filter="url(#shadow10)"/><rect x="24" y="20" width="24" height="12" fill="#1abc9c" rx="3"/><circle cx="26" cy="46" r="6" fill="#2c3e50"/><circle cx="26" cy="46" r="3" fill="#ecf0f1"/><circle cx="54" cy="46" r="6" fill="#2c3e50"/><circle cx="54" cy="46" r="3" fill="#ecf0f1"/><rect x="26" y="22" width="6" height="8" fill="#5dade2" rx="1"/><rect x="40" y="22" width="6" height="8" fill="#5dade2" rx="1"/></svg>`,
+            
+            // Auto 11 - Braon kamion
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow11" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="10" y="22" width="64" height="22" fill="#795548" rx="5" filter="url(#shadow11)"/><rect x="12" y="16" width="28" height="12" fill="#5d4037" rx="2"/><circle cx="20" cy="46" r="8" fill="#2c3e50"/><circle cx="20" cy="46" r="4" fill="#ecf0f1"/><circle cx="62" cy="46" r="8" fill="#2c3e50"/><circle cx="62" cy="46" r="4" fill="#ecf0f1"/><rect x="14" y="18" width="10" height="9" fill="#5dade2" rx="1"/><rect x="28" y="18" width="10" height="9" fill="#5dade2" rx="1"/></svg>`,
+            
+            // Auto 12 - Srebrni luksuzni
+            `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow12" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs><rect x="12" y="26" width="62" height="20" fill="#bdc3c7" rx="6" filter="url(#shadow12)"/><rect x="20" y="16" width="32" height="14" fill="#95a5a6" rx="3"/><circle cx="24" cy="47" r="8" fill="#2c3e50"/><circle cx="24" cy="47" r="4" fill="#ecf0f1"/><circle cx="60" cy="47" r="8" fill="#2c3e50"/><circle cx="60" cy="47" r="4" fill="#ecf0f1"/><rect x="22" y="18" width="8" height="11" fill="#5dade2" rx="1"/><rect x="40" y="18" width="8" height="11" fill="#5dade2" rx="1"/><line x1="12" y1="36" x2="74" y2="36" stroke="#fff" stroke-width="1.5" opacity="0.4"/></svg>`
+        ];
+        
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let timeElapsed = 0;
+        let timerInterval;
+        let canFlip = true;
+        let currentLanguage = localStorage.getItem('bembememo_lang') || 'bs';
+        
+        // Zvučni efekti - optimizirani za djecu
+        const sounds = {
+            flip: new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQIAAAAAAA=='),
+            match: new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQIAAAAAAA=='),
+            win: new Audio('data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQoGAACAgYKDhIOFhYaGh4eIiImJiouKi4uMjI2Njo6Pj5CQkZGSk5OUlJWVlpaXl5iYmZmampqbm5ycnZ2enp+foKChoaKio6OkpKWlpqanp6ioqampqqqrq6ysra2urq+vsLCxsbKys7O0tLW1tra3t7i4ubm6uru7vLy9vb6+v7/AwMHBwsLDw8TExcXGxsfHyMjJycrKy8vMzM3Nzs7Pz9DQ0dHS0tPT1NTV1dbW19fY2Nra29vc3N3d3t7f3+Dg4eHi4uPj5OTl5ebm5+fo6Onp6urr6+zs7e3u7u/v8PDx8fLy8/P09PX19vb39/j4+fn6+vv7/Pz9/f7+////'),
+            vroom: new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQIAAAAAAA==')
+        };
+
+        const translations = {
+            bs: {
+                title: 'BEMBE.play',
+                subtitle: 'Pronađi parove autića!',
+                moves: 'Poteza',
+                pairs: 'Parova',
+                time: 'Vrijeme',
+                newGame: 'Nova Igra',
+                playAgain: 'Igraj Opet',
+                winTitle: '🎉 Bravo! 🎉',
+                winText: 'Pronašao si sve parove!',
+                cardText: 'BEMBE',
+                infoTitle: '🎮 O BEMBE.play',
+                infoText: 'Zdravo! 👋 Ova igra je napravljena sa mnogo ljubavi za moga sina Svena. 💙 Sven obožava autićе - "bembe" kako on kaže - pa sam odlučio kreirati ovu zabavnu memorijsku igru baš za njega. Cilj je pronađi sve parove autića kroz igru. Svaki match donosi zadovoljstvo i zabavu! 🏎️  Zabavite se!',
+                closeBtn: 'Zatvori'
+            },
+            de: {
+                title: 'BEMBE.play',
+                subtitle: 'Finde die Auto-Paare!',
+                moves: 'Züge',
+                pairs: 'Paare',
+                time: 'Zeit',
+                newGame: 'Neues Spiel',
+                playAgain: 'Nochmal',
+                winTitle: '🎉 Bravo! 🎉',
+                winText: 'Du hast alle Paare gefunden!',
+                cardText: 'BEMBE',
+                infoTitle: '🎮 Über BEMBE.play',
+                infoText: 'Hallo! 👋 Dieses Spiel wurde mit viel Liebe für meinen Sohn Sven gemacht. 💙 Sven liebt Autos - "Bembe" wie er sagt - daher habe ich beschlossen, dieses unterhaltsame Memory-Spiel speziell für ihn zu erstellen. Das Ziel ist, alle Autopaare im Spiel zu finden. Jeder Match bringt Freude und Spaß! 🏎️  Viel Spaß!',
+                closeBtn: 'Schließen'
+            },
+            en: {
+                title: 'BEMBE.play',
+                subtitle: 'Find the car pairs!',
+                moves: 'Moves',
+                pairs: 'Pairs',
+                time: 'Time',
+                newGame: 'New Game',
+                playAgain: 'Play Again',
+                winTitle: '🎉 Great! 🎉',
+                winText: 'You found all pairs!',
+                cardText: 'BEMBE',
+                infoTitle: '🎮 About BEMBE.play',
+                infoText: 'Hello! 👋 This game was created with lots of love for my son Sven. 💙 Sven loves cars - "bembe" as he calls them - so I decided to create this fun memory game just for him. The goal is to find all the car pairs in the game. Each match brings joy and fun! 🏎️  Have fun!',
+                closeBtn: 'Close'
+            }
+        };
+
+        function playSound(soundName) {
+            try {
+                if (sounds[soundName]) {
+                    sounds[soundName].currentTime = 0;
+                    const playPromise = sounds[soundName].play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(e => {
+                            if (e.name !== 'NotAllowedError') {
+                                console.log('Sound play failed:', e);
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.log('Sound error:', e);
+            }
+        }
+
+        function openInfoPopup() {
+            const infoPopup = document.getElementById('infoPopup');
+            const t = translations[currentLanguage];
+            document.getElementById('infoTitle').textContent = t.infoTitle;
+            document.getElementById('infoText').textContent = t.infoText;
+            document.getElementById('closeBtn').textContent = t.closeBtn;
+            infoPopup.classList.add('show');
+        }
+
+        function closeInfoPopup() {
+            const infoPopup = document.getElementById('infoPopup');
+            infoPopup.classList.remove('show');
+        }
+
+        // Zatvori popup kada se klikne van njega
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('infoPopup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeInfoPopup();
+                }
+            });
+        });
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('bembememo_lang', lang);
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            document.getElementById('gameTitle').textContent = t.title;
+            document.getElementById('gameSubtitle').textContent = t.subtitle;
+            document.getElementById('labelMoves').textContent = t.moves;
+            document.getElementById('labelPairs').textContent = t.pairs;
+            document.getElementById('labelTime').textContent = t.time;
+            document.getElementById('labelNewGame').textContent = t.newGame;
+            document.getElementById('labelPlayAgain').textContent = t.playAgain;
+            document.getElementById('labelFinalMoves').textContent = t.moves;
+            document.getElementById('labelFinalTime').textContent = t.time;
+            document.getElementById('infoTitle').textContent = t.infoTitle;
+            document.getElementById('infoText').textContent = t.infoText;
+            document.getElementById('closeBtn').textContent = t.closeBtn;
+            
+            document.querySelectorAll('.card-front').forEach(front => {
+                front.textContent = t.cardText;
+            });
+        }
+
+        function initGame() {
+            const gameBoard = document.getElementById('gameBoard');
+            gameBoard.innerHTML = '';
+            
+            // Uvijek 3x3 tabla
+            const totalCards = 9;
+            const neededPairs = 4;
+            
+            document.getElementById('totalPairs').textContent = neededPairs;
+            
+            // Kreiraj 4 para + 1 solo kartica = 9 kartica
+            const selectedCars = [];
+            const selectedIndices = [];
+            
+            for (let i = 0; i < neededPairs; i++) {
+                selectedCars.push(carImages[i]);
+                selectedCars.push(carImages[i]);
+                selectedIndices.push(i);
+                selectedIndices.push(i);
+            }
+            
+            // Dodaj jednu solo karticu
+            selectedCars.push(carImages[neededPairs]);
+            selectedIndices.push(neededPairs);
+            
+            // Pomješaj
+            const shuffled = selectedCars.map((car, i) => ({ car, index: selectedIndices[i] }))
+                .sort(() => Math.random() - 0.5);
+            
+            cards = shuffled;
+            
+            // Kreiraj kartice
+            const t = translations[currentLanguage];
+            cards.forEach((cardData, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+                card.dataset.car = cardData.index;
+                
+                card.innerHTML = `
+                    <div class="card-front">${t.cardText}</div>
+                    <div class="card-back">${cardData.car}</div>
+                `;
+                
+                card.addEventListener('click', () => flipCard(card));
+                gameBoard.appendChild(card);
+            });
+            
+            // Resetuj statistike
+            matchedPairs = 0;
+            moves = 0;
+            timeElapsed = 0;
+            flippedCards = [];
+            canFlip = true;
+            
+            document.getElementById('moves').textContent = '0';
+            document.getElementById('pairs').textContent = '0';
+            document.getElementById('time').textContent = '0';
+            document.getElementById('winMessage').classList.remove('show');
+            
+            // Pokreni tajmer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeElapsed++;
+                document.getElementById('time').textContent = timeElapsed;
+            }, 1000);
+        }
+
+        function flipCard(card) {
+            if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) {
+                return;
+            }
+            
+            playSound('flip');
+            card.classList.add('flipped');
+            flippedCards.push(card);
+            
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                
+                setTimeout(checkMatch, 1000);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.dataset.car === card2.dataset.car) {
+                playSound('match');
+                playSound('vroom');
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                document.getElementById('pairs').textContent = matchedPairs;
+                
+                if (matchedPairs === 4) {
+                    clearInterval(timerInterval);
+                    setTimeout(() => {
+                        playSound('win');
+                        showWinMessage();
+                    }, 500);
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+            }
+            
+            flippedCards = [];
+            canFlip = true;
+        }
+
+        function showWinMessage() {
+            document.getElementById('finalMoves').textContent = moves;
+            document.getElementById('finalTime').textContent = timeElapsed;
+            
+            const winMsg = document.getElementById('winMessage');
+            const t = translations[currentLanguage];
+            
+            winMsg.querySelector('h2').textContent = t.winTitle;
+            winMsg.querySelector('p').textContent = t.winText;
+            
+            winMsg.classList.add('show');
+        }
+
+        function resetGame() {
+            clearInterval(timerInterval);
+            initGame();
+        }
+
+        // Pokreni igru
+        window.onload = function() {
+            // Postavi aktivno dugme za jezik
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(currentLanguage)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            updateLanguage();
+            initGame();
+        };
+    </script>
+</body>
+</html>
