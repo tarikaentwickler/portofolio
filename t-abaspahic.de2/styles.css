@@ -362,10 +362,16 @@
   display: flex; 
   flex-direction: column; 
   justify-content: space-between; /* poravnava sadržaj */
-  text-align:justify;
+  text-align: center;
   align-items: center;
   gap: 10px;
   padding: 10px;
+}
+
+.project-card a {
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 .project-card img {
@@ -376,6 +382,12 @@
   object-fit: cover;
   margin-bottom: 15px;
   margin-top: 25px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.project-card a img:hover {
+  transform: scale(1.05);
 }
 
 /* Naslov ispod slike */
@@ -384,7 +396,6 @@
   letter-spacing: 1px;
   color: white;
   text-align: center !important;
- 
   margin-top: 5px;
 }
 
@@ -393,9 +404,7 @@
   font-size: 0.9rem;
   color: #ddd;
   max-width: 70%;
-  text-align: center;
-  
-
+  text-align: justify;
 }
 
 /*--------------------------------------------------------------------------------------------------projects end */
