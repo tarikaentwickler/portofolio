@@ -103,8 +103,9 @@
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.6s ease-in-out;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            perspective: 1000px;
         }
 
         .card:hover {
@@ -129,6 +130,7 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -375,7 +377,7 @@
 <body>
     <div class="header">
         <button class="info-btn" onclick="openInfoPopup()" title="O igri">ℹ️</button>
-        <h1>🏎️ <span id="gameTitle">BemBemeMo</span> 🏎️</h1>
+        <h1>🏎️ <span id="gameTitle">BEMBE.play</span> 🏎️</h1>
         <p id="gameSubtitle">Pronađi parove autića!</p>
         <div class="language-switcher">
             <button class="lang-btn active" onclick="changeLanguage('bs')">🇧🇦 BS</button>
@@ -519,8 +521,17 @@
 
         function playSound(soundName) {
             try {
-                sounds[soundName].currentTime = 0;
-                sounds[soundName].play().catch(e => console.log('Sound play failed:', e));
+                if (sounds[soundName]) {
+                    sounds[soundName].currentTime = 0;
+                    const playPromise = sounds[soundName].play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(e => {
+                            if (e.name !== 'NotAllowedError') {
+                                console.log('Sound play failed:', e);
+                            }
+                        });
+                    }
+                }
             } catch (e) {
                 console.log('Sound error:', e);
             }
